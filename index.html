@@ -813,24 +813,36 @@
   function playProjectCard(card) {
   var img = card.querySelector('.proj-poster');
   var sources = {
-    '11LABS AD': '11labs ad _1.mp4',
-    'DATE VENUE REVEAL': 'date venue reveal .mp4',
-    "THAT'S WHAT I LIKE": 'thats what i like.mp4',
-    'VOLTAIRE TRAILER': 'voltaire trailer.mp4',
-    'IPHONE ANIMATION': 'animation.mp4',
-    'VENUE REVEAL': 'venue.mp4'
-  };
+  '11LABS AD': '11labs ad _1.mp4',
+  'DATE VENUE REVEAL': 'date venue reveal .mp4',
+  "THAT'S WHAT I LIKE": 'thats what i like.mp4',
+  'VOLTAIRE TRAILER': 'voltaire trailer.mp4',
+  'IPHONE ANIMATION': 'animation.mp4',
+  'VENUE REVEAL': 'venue.mp4'
+};
+  // Preload all project videos as soon as the page loads
+document.querySelectorAll('.project-card').forEach(function(card) {
   var title = card.querySelector('.project-title').textContent;
   var src = sources[title];
-  if (!src || card.querySelector('video')) return;
-  if (img) img.style.display = 'none';
+  if (!src) return;
   var v = document.createElement('video');
   v.src = src;
   v.muted = true;
   v.playsinline = true;
   v.loop = true;
-  v.style.cssText = 'width:100%;height:100%;object-fit:cover;position:absolute;inset:0;';
+  v.preload = 'auto';
+  v.style.cssText = 'width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:none;';
   card.insertBefore(v, card.firstChild);
+  v.load();
+});
+
+function playProjectCard(card) {
+  var img = card.querySelector('.proj-poster');
+  var v = card.querySelector('video');
+  if (!v) return;
+  if (img) img.style.display = 'none';
+  v.style.display = 'block';
+  v.muted = true;
   v.play().then(function() {
     v.muted = false;
     v.volume = 0.7;
@@ -840,7 +852,7 @@
 function pauseProjectCard(card) {
   var v = card.querySelector('video');
   var img = card.querySelector('.proj-poster');
-  if (v) { v.pause(); v.muted = true; v.src = ''; card.removeChild(v); }
+  if (v) { v.pause(); v.currentTime = 0; v.muted = true; v.style.display = 'none'; }
   if (img) img.style.display = '';
 }
 
