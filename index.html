@@ -828,18 +828,17 @@
     v.muted = true;
     v.playsInline = true;
     v.loop = true;
-    v.preload = 'metadata';
+    v.preload = 'auto'; // start buffering immediately
     v.style.cssText = 'width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:none;';
     card.insertBefore(v, card.firstChild);
     v.load();
+  });
 
-    // ← NEW: on first touch, upgrade preload so buffering starts immediately
-    card.addEventListener('touchstart', function() {
-      if (v.preload !== 'auto') {
-        v.preload = 'auto';
-        v.load();
-      }
-    }, { passive: true });
+  // Stagger-load so they don't all hammer bandwidth at once
+  var cards = document.querySelectorAll('.project-card');
+  cards.forEach(function(card, i) {
+    var v = card.querySelector('video');
+    if (v) setTimeout(function() { v.load(); }, i * 300);
   });
 });
 
