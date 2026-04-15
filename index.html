@@ -793,6 +793,7 @@
   v.style.display = 'block';
   v.style.zIndex = '2';
   v.muted = true;
+  if (v.readyState === 0) { v.preload = 'auto'; v.load(); }
   var playPromise = v.play();
   if (playPromise !== undefined) {
     playPromise.then(function() {
@@ -850,9 +851,6 @@ function pauseProjectCard(card) {
     entries.forEach(function(e) {
       if (e.isIntersecting) {
         e.target.classList.add('is-visible');
-        // Preload any video inside this card
-        var v = e.target.querySelector('video');
-        if (v) { v.preload = 'auto'; v.load(); }
         io.unobserve(e.target);
       }
     });
