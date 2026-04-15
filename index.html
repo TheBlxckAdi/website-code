@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Adarsh Gupta — Editor & Creator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAABAAAAAQBPJcTWAAAAJHpUWHRDcmVhdG9yAAAImXNMyU9KVXBMK0ktUnBNS0tNLikGAEF6Bs5qehXFAAACOUlEQVRoge2YzWoVQRCFvzJG0EW8C4ME8Q8CghiMxo1b38DX8AncuPct3LvyBXTnTiErjd5NyCoYFX9BFDwu7ghhcqe7aqabm8UcGC53uqq6zvSp6p6BESNGjFgkLGIs6TxwN+CybWa7oYxqQtIDxfC4dk4ngva3gvabQfswogS2KtuH4a4BScvAD+BUcI7LZrYX9HEjsgIbxJOHuOxCiBDoq+eqMooQ6JvIsSHQVwpVO5GriCUtAd+AMz3nWTOz/Z6+SXhX4Br9k4eKMvISGNpJqnUiL4GhT/D2QP9OeAkMLcQ7A/07kS1iSQZ8AVZSZo5Y58zsUyA3FzwrcJV08gCvHHGqyMhDIKf/X8DzAnF6wUMg10GmwHtHnIWtQG7iaXPlUKWVliDwFnjniLMu6azDLoQkAUkXgNVMjKmZHTA7auRQXEa5FfAU3k7zuxAZ5Qh4NrD/8nnjsC3eiU5mxnM76EdgImkCHDjmK04guXtK2gMuFpzvL7BiZj9LBexcAUmrlE0eZpLdBF62B66IS2SKfNd41r6XklCtI/AWcwgA94AnGd8jikkVca0jcNEHswgCRQs5RaCWhK5LOl0q2FwCzZa/nvH9DXxtXd8dcy4BNwI5JtG1Ajcdvo/MbHL4AtaYtcocismoi4DnFXC7faPp7ztzbNuoTsBzhDhCoMFrh2+x+uoikHtC+2b2oWPM83q50XztHoyujewhs2LrwufE2FPA8zl9Gfhz6P8L4L7Db8SIESOOEf4BJ9uWz1o8Iq4AAAAASUVORK5CYII=" />
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('Y1aQXkhFg9mjvuWdf');</script>
+<script src="https://player.vimeo.com/api/player.js"></script>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body { background: #000; color: #fff; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; transition: color 0.2s ease; }
+  button { cursor: pointer; }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #000; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #00FF00; }
+
+  /* NAVBAR */
+  .navbar { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:20px 48px; border-bottom:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.95); backdrop-filter:blur(10px); transition:all 0.3s; }
+  .navbar-logo { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:0.15em; color:#fff; cursor:pointer; }
+  .navbar-logo span { color:#00FF00; }
+  .navbar-links { display:flex; gap:32px; }
+  .navbar-links a { font-size:11px; font-weight:500; letter-spacing:0.2em; color:rgba(255,255,255,0.5); transition:color 0.2s; }
+  .navbar-links a:hover, .navbar-links a.active { color:#00FF00; }
+  .navbar-cart-btn { background:transparent; border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.5); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; transition:all 0.2s; position:relative; }
+  .navbar-cart-btn:hover { border-color:#00FF00; color:#00FF00; }
+  .cart-count { position:absolute; top:-4px; right:-4px; background:#00FF00; color:#000; font-size:9px; font-weight:700; width:16px; height:16px; border-radius:50%; display:none; align-items:center; justify-content:center; }
+  .cart-count.show { display:flex; }
+
+  /* PAGES */
+  .page { display:none; padding-top:80px; }
+  .page.active { display:block; }
+
+  /* HERO */
+  .hero { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px 48px 120px; text-align:center; }
+  .hero-inner { max-width:900px; }
+  .hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(3.5rem,10vw,9rem); line-height:0.9; letter-spacing:-0.02em; margin-bottom:4px; }
+  .hero-bio { color:rgba(255,255,255,0.6); font-size:14px; font-weight:300; line-height:1.7; max-width:600px; margin:0 auto 20px; }
+  .hero-socials { display:flex; justify-content:center; align-items:center; gap:32px; margin-bottom:20px; flex-wrap:wrap; }
+  .social-link { display:flex; flex-direction:column; align-items:center; gap:8px; width:90px; }
+  .social-icon-wrap { width:48px; height:48px; border:1px solid rgba(255,255,255,0.2); border-radius:50%; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.4); font-size:18px; transition:all 0.2s; }
+  .social-link:hover .social-icon-wrap { color:#00FF00; border-color:#00FF00; }
+  .social-label { font-size:10px; letter-spacing:0.3em; color:rgba(255,255,255,0.3); font-weight:400; transition:color 0.2s; }
+  .social-link:hover .social-label { color:#00FF00; }
+  .scroll-btn { display:flex; flex-direction:column; align-items:center; gap:8px; background:transparent; border:none; color:rgba(255,255,255,0.3); font-size:10px; letter-spacing:0.3em; font-family:'Inter',sans-serif; margin:0 auto; transition:color 0.2s; }
+  .scroll-btn:hover { color:#00FF00; }
+  .scroll-arrow { font-size:20px; animation:bounce 2s infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+
+  /* SECTIONS */
+  .section { padding:96px 48px; max-width:1400px; margin:0 auto; }
+  .section-header { margin-bottom:64px; }
+  .section-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,6vw,5rem); color:#fff; margin-bottom:8px; }
+  .section-title .green { color:#00FF00; }
+  .section-sub { font-size:11px; font-weight:400; letter-spacing:0.25em; color:rgba(255,255,255,0.4); }
+
+  /* PROJECTS — video cards on home */
+  .projects-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .project-card { position:relative; overflow:hidden; cursor:pointer; aspect-ratio:16/9; background:#111; }
+  .project-card .embed-wrap { position:absolute; inset:0; width:100%; height:100%; }
+  .project-card .embed-wrap iframe { width:100%; height:100%; border:none; display:block; }
+  .project-overlay { position:absolute; inset:0; background:linear-gradient(to top,#000 0%,rgba(0,0,0,0.5) 50%,transparent 100%); opacity:0.8; transition:opacity 0.3s; display:flex; align-items:center; justify-content:center; pointer-events:none; z-index:2; }
+  .project-card:hover .project-overlay { opacity:0.9; }
+  .proj-play { width:52px; height:52px; border:2px solid rgba(255,255,255,0.5); border-radius:50%; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.5); font-size:18px; transition:opacity 0.3s; }
+  .project-card:hover .proj-play { opacity:0; }
+  .project-info { position:absolute; bottom:0; left:0; right:0; padding:24px; transform:translateY(8px); transition:transform 0.3s; z-index:3; pointer-events:none; }
+  .project-card:hover .project-info { transform:translateY(0); }
+  .project-cat { font-size:10px; font-weight:500; letter-spacing:0.2em; color:#00FF00; margin-bottom:6px; }
+  .project-title { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:0.1em; }
+  .project-dur { font-size:11px; color:rgba(255,255,255,0.4); margin-top:4px; }
+  .project-border-fx { position:absolute; inset:0; border:2px solid #00FF00; opacity:0; transition:opacity 0.3s; pointer-events:none; z-index:4; }
+  .project-card:hover .project-border-fx { opacity:1; }
+
+  /* BRANDS */
+  .brands-section { padding:96px 48px; border-top:1px solid rgba(255,255,255,0.1); }
+  .brands-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,7vw,6rem); text-align:center; margin-bottom:64px; letter-spacing:0.05em; }
+  .brands-overflow { overflow:hidden; }
+  .brands-track { display:flex; gap:64px; animation:scrollTrack 25s linear infinite; width:max-content; }
+  .brands-track:hover { animation-play-state:paused; }
+  @keyframes scrollTrack { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .brand-item { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:0.2em; color:rgba(255,255,255,0.2); flex-shrink:0; transition:color 0.2s; cursor:default; }
+  .brand-item:hover { color:#00FF00; }
+
+  /* MY WORK */
+  .work-section { padding:48px 48px 96px; max-width:1400px; margin:0 auto; }
+  .work-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:5px; }
+  .video-card { position:relative; overflow:hidden; cursor:pointer; aspect-ratio:16/9; background:#111; }
+  .video-card video { width:100%; height:100%; object-fit:cover; transition:transform 0.3s ease; }
+  .video-overlay { position:absolute; inset:0; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; transition:background 0.3s; }
+  .video-card:hover .video-overlay { background:rgba(0,0,0,0.2); }
+  .play-circle { width:64px; height:64px; border:2px solid rgba(255,255,255,0.5); border-radius:50%; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.5); font-size:22px; transition:opacity 0.3s; }
+  .video-card:hover .play-circle { opacity:0; }
+  .video-info { position:absolute; bottom:0; left:0; right:0; padding:24px; background:linear-gradient(to top,#000,transparent); display:flex; align-items:flex-end; justify-content:space-between; transform:translateY(8px); transition:transform 0.3s; }
+  .video-card:hover .video-info { transform:translateY(0); }
+  .video-meta .v-cat { font-size:10px; font-weight:500; letter-spacing:0.2em; color:#00FF00; margin-bottom:4px; }
+  .video-meta .v-title { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:0.1em; }
+  .v-duration { font-size:13px; color:rgba(255,255,255,0.4); }
+  .video-border-fx { position:absolute; inset:0; border:2px solid #00FF00; opacity:0; transition:opacity 0.3s; pointer-events:none; }
+  .video-card:hover .video-border-fx { opacity:1; }
+
+  /* SHOWREEL */
+  .showreel-card { position:relative; overflow:hidden; cursor:pointer; aspect-ratio:16/7; background:#111; margin-bottom:5px; border-radius:4px; }
+  .showreel-card video { width:100%; height:100%; object-fit:cover; transition:transform 0.4s ease; }
+  .showreel-card:hover video { transform:scale(1.03); }
+  .showreel-badge { position:absolute; top:20px; left:24px; z-index:3; background:#00FF00; color:#000; font-size:9px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; padding:5px 12px; }
+  .showreel-overlay { position:absolute; inset:0; background:rgba(0,0,0,0.45); display:flex; align-items:center; justify-content:center; transition:background 0.3s; }
+  .showreel-card:hover .showreel-overlay { background:rgba(0,0,0,0.15); }
+  .showreel-play { width:76px; height:76px; border-radius:50%; border:2px solid rgba(255,255,255,0.55); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.7); font-size:26px; transition:opacity 0.3s; }
+  .showreel-card:hover .showreel-play { opacity:0; }
+  .showreel-info { position:absolute; bottom:0; left:0; right:0; padding:24px 28px; background:linear-gradient(to top,#000 0%,rgba(0,0,0,0.75) 50%,transparent 100%); display:flex; align-items:flex-end; justify-content:space-between; transform:translateY(6px); transition:transform 0.3s; }
+  .showreel-card:hover .showreel-info { transform:translateY(0); }
+  .showreel-cat { font-size:10px; font-weight:500; letter-spacing:0.2em; color:#00FF00; margin-bottom:6px; }
+  .showreel-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.6rem,3vw,2.6rem); letter-spacing:0.08em; }
+  .showreel-dur { font-size:13px; color:rgba(255,255,255,0.4); }
+  .showreel-border { position:absolute; inset:0; border:2px solid #00FF00; opacity:0; transition:opacity 0.3s; pointer-events:none; border-radius:4px; }
+  .showreel-card:hover .showreel-border { opacity:1; }
+
+  /* CTA */
+  .cta-block { margin-top:96px; text-align:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:64px; }
+  .cta-block h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(2rem,5vw,4rem); margin-bottom:20px; }
+  .cta-block p { color:rgba(255,255,255,0.6); font-size:18px; font-weight:300; max-width:560px; margin:0 auto 32px; line-height:1.7; }
+  .btn-primary { display:inline-block; background:#00FF00; color:#000; font-size:12px; font-weight:700; letter-spacing:0.15em; padding:16px 36px; border:none; transition:background 0.2s; cursor:pointer; }
+  .btn-primary:hover { background:#00DD00; }
+
+  /* SHOP */
+  .shop-section { padding:48px 48px 96px; max-width:1400px; margin:0 auto; }
+  .divider { border:none; border-top:1px solid rgba(255,255,255,0.1); margin:64px 0; }
+  .services-grid { display:grid; grid-template-columns:repeat(2,1fr); border:1px solid rgba(255,255,255,0.1); border-radius:8px; overflow:hidden; }
+  .service-card { padding:40px; background:#0d0d0d; transition:background 0.2s; }
+  .service-card:hover { background:rgba(255,255,255,0.02); }
+  .service-card:nth-child(1),.service-card:nth-child(3) { border-right:1px solid rgba(255,255,255,0.1); }
+  .service-card:nth-child(1),.service-card:nth-child(2) { border-bottom:1px solid rgba(255,255,255,0.1); }
+  .service-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:12px; }
+  .service-name { font-size:13px; font-weight:700; letter-spacing:0.1em; }
+  .service-price { font-family:'Bebas Neue',sans-serif; font-size:36px; white-space:nowrap; }
+  .service-desc { font-size:13px; font-weight:300; color:rgba(255,255,255,0.4); line-height:1.7; margin-bottom:24px; }
+  .service-features { list-style:none; margin-bottom:32px; }
+  .service-features li { display:flex; align-items:center; gap:12px; font-size:13px; color:rgba(255,255,255,0.6); padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+  .feat-dot { width:5px; height:5px; border-radius:50%; background:#00FF00; flex-shrink:0; }
+  .btn-service { width:100%; padding:12px; background:#fff; color:#000; font-size:11px; font-weight:700; letter-spacing:0.15em; border:none; border-radius:4px; transition:background 0.2s; cursor:pointer; }
+  .btn-service:hover { background:#00FF00; }
+  .products-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+  .product-card { position:relative; background:#111; border:1px solid rgba(255,255,255,0.1); border-radius:8px; overflow:hidden; transition:all 0.3s; }
+  .product-card:hover { border-color:#00FF00; transform:translateY(-4px); }
+  .prod-badge { position:absolute; top:10px; right:10px; z-index:2; background:#00FF00; color:#000; font-size:9px; font-weight:700; letter-spacing:0.1em; padding:3px 8px; border-radius:3px; }
+  .prod-img { aspect-ratio:16/9; overflow:hidden; }
+  .prod-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.7s; }
+  .product-card:hover .prod-img img { transform:scale(1.05); }
+  .prod-body { padding:16px 16px 20px; }
+  .prod-cat { font-size:10px; font-weight:500; letter-spacing:0.2em; color:#00FF00; margin-bottom:4px; }
+  .prod-title { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:0.08em; margin-bottom:6px; line-height:1.1; }
+  .prod-desc { font-size:12px; font-weight:300; color:rgba(255,255,255,0.5); margin-bottom:12px; line-height:1.6; }
+  .prod-footer { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .prod-price { font-family:'Bebas Neue',sans-serif; font-size:26px; }
+  .prod-size { font-size:10px; color:rgba(255,255,255,0.3); }
+  .btn-add { width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; font-size:11px; font-weight:700; letter-spacing:0.15em; padding:10px; border-radius:4px; display:flex; align-items:center; justify-content:center; gap:6px; transition:all 0.2s; cursor:pointer; }
+  .btn-add:hover { background:#00FF00; color:#000; border-color:#00FF00; }
+  .btn-add:disabled { opacity:0.5; cursor:not-allowed; }
+  .btn-add:disabled:hover { background:rgba(255,255,255,0.05); color:#fff; border-color:rgba(255,255,255,0.1); }
+
+  /* FAQ */
+  .faq-list { max-width:800px; display:flex; flex-direction:column; gap:12px; margin:0 auto; }
+  .faq-item { border:1px solid rgba(255,255,255,0.1); border-radius:8px; overflow:hidden; }
+  .faq-btn { width:100%; background:transparent; border:none; color:#fff; display:flex; align-items:center; justify-content:space-between; padding:20px 24px; text-align:left; font-size:15px; font-weight:500; transition:background 0.2s; cursor:pointer; font-family:'Inter',sans-serif; }
+  .faq-btn:hover { background:rgba(255,255,255,0.03); }
+  .faq-chevron { color:#00FF00; font-size:20px; flex-shrink:0; margin-left:16px; transition:transform 0.3s; }
+  .faq-answer { max-height:0; overflow:hidden; transition:max-height 0.35s ease; }
+  .faq-answer.open { max-height:300px; }
+  .faq-answer p { padding:0 24px 24px; font-size:14px; font-weight:300; color:rgba(255,255,255,0.6); line-height:1.8; }
+
+  /* INFO */
+  .info-section { padding:48px 48px 96px; max-width:1400px; margin:0 auto; }
+  .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; margin-bottom:80px; }
+  .about-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(2rem,4vw,3.5rem); margin-bottom:24px; }
+  .about-body { font-size:17px; font-weight:300; color:rgba(255,255,255,0.7); line-height:1.9; margin-bottom:40px; }
+  .stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; border-top:1px solid rgba(255,255,255,0.1); padding-top:32px; margin-bottom:32px; }
+  .stat-num { font-family:'Bebas Neue',sans-serif; font-size:48px; color:#00FF00; margin-bottom:4px; }
+  .stat-label { font-size:11px; letter-spacing:0.2em; color:rgba(255,255,255,0.4); }
+  .contact-details { display:flex; flex-direction:column; gap:16px; margin-top:32px; }
+  .contact-row { display:flex; align-items:center; gap:12px; font-size:15px; color:rgba(255,255,255,0.7); }
+  .contact-icon { color:#00FF00; font-size:18px; }
+  .contact-form-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(2rem,4vw,3.5rem); margin-bottom:24px; }
+  .form-group { margin-bottom:24px; }
+  .form-label { display:block; font-size:11px; font-weight:400; letter-spacing:0.2em; color:rgba(255,255,255,0.6); margin-bottom:8px; }
+  .form-input { width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:4px; padding:14px 16px; color:#fff; font-family:'Inter',sans-serif; font-size:14px; outline:none; transition:border-color 0.2s; }
+  .form-input:focus { border-color:#00FF00; }
+  textarea.form-input { resize:none; height:140px; }
+  .pkg-label { display:block; font-size:11px; font-weight:400; letter-spacing:0.2em; color:rgba(255,255,255,0.6); margin-bottom:12px; }
+  .pkg-options { display:flex; flex-wrap:wrap; gap:10px; }
+  .pkg-option input[type="radio"] { display:none; }
+  .pkg-option label { display:inline-block; padding:9px 18px; border:1px solid rgba(255,255,255,0.15); border-radius:4px; font-size:11px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:rgba(255,255,255,0.45); cursor:pointer; transition:all 0.2s; user-select:none; }
+  .pkg-option label:hover { border-color:rgba(0,255,0,0.5); color:rgba(255,255,255,0.8); }
+  .pkg-option input[type="radio"]:checked + label { border-color:#00FF00; color:#00FF00; background:rgba(0,255,0,0.07); }
+  .btn-submit { width:100%; background:#00FF00; color:#000; font-family:'Inter',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.15em; padding:16px; border:none; border-radius:4px; display:flex; align-items:center; justify-content:center; gap:8px; transition:background 0.2s; cursor:pointer; }
+  .btn-submit:hover { background:#00DD00; }
+  .avail-banner { border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:64px; text-align:center; background:linear-gradient(135deg,rgba(255,255,255,0.03) 0%,transparent 100%); }
+  .avail-banner h3 { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.8rem,4vw,3.5rem); margin-bottom:16px; }
+  .avail-banner p { font-size:17px; font-weight:300; color:rgba(255,255,255,0.6); max-width:560px; margin:0 auto; line-height:1.7; }
+  .form-success { display:none; background:rgba(0,255,0,0.08); border:1px solid #00FF00; border-radius:8px; padding:48px; text-align:center; }
+  .form-success.show { display:block; }
+  .success-circle { width:64px; height:64px; background:#00FF00; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:28px; color:#000; }
+  .success-title { font-family:'Bebas Neue',sans-serif; font-size:28px; color:#00FF00; margin-bottom:8px; }
+  .success-sub { font-size:14px; color:rgba(255,255,255,0.6); }
+
+  /* FOOTER */
+  footer { background:#000; border-top:1px solid rgba(255,255,255,0.1); }
+  .footer-inner { max-width:1400px; margin:0 auto; padding:64px 48px 32px; }
+  .footer-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:48px; margin-bottom:48px; }
+  .footer-brand { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:0.15em; margin-bottom:8px; }
+  .footer-brand span { color:#00FF00; }
+  .footer-role { font-size:13px; font-weight:300; color:rgba(255,255,255,0.4); }
+  .footer-col-title { font-size:11px; font-weight:500; letter-spacing:0.25em; color:rgba(255,255,255,0.6); margin-bottom:16px; }
+  .footer-text { font-size:13px; font-weight:300; color:rgba(255,255,255,0.4); margin-bottom:6px; }
+  .footer-socials { display:flex; gap:16px; }
+  .footer-social { color:rgba(255,255,255,0.4); font-size:20px; transition:color 0.2s; cursor:pointer; }
+  .footer-social:hover { color:#00FF00; }
+  .footer-copy { border-top:1px solid rgba(255,255,255,0.1); padding-top:24px; text-align:center; font-size:12px; font-weight:300; color:rgba(255,255,255,0.3); }
+
+  /* CART */
+  .cart-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(4px); z-index:200; align-items:center; justify-content:center; }
+  .cart-backdrop.open { display:flex; }
+  .cart-panel { background:#141414; width:100%; max-width:440px; max-height:90vh; border-radius:8px; overflow:hidden; display:flex; flex-direction:column; position:relative; }
+  .cart-header { display:flex; align-items:center; justify-content:space-between; padding:24px; border-bottom:1px solid rgba(255,255,255,0.1); }
+  .cart-header h2 { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:0.15em; }
+  .cart-close { background:transparent; border:none; color:rgba(255,255,255,0.5); font-size:22px; transition:color 0.2s; cursor:pointer; }
+  .cart-close:hover { color:#fff; }
+  .cart-body { flex:1; overflow-y:auto; padding:24px; }
+  .cart-empty { text-align:center; padding:48px 0; font-size:14px; color:rgba(255,255,255,0.4); }
+  .cart-item { display:flex; gap:16px; padding:16px; background:rgba(255,255,255,0.04); border-radius:6px; margin-bottom:12px; }
+  .cart-item img { width:72px; height:72px; object-fit:cover; border-radius:4px; }
+  .cart-item-info { flex:1; }
+  .cart-item-title { font-size:13px; font-weight:500; margin-bottom:4px; }
+  .cart-item-price { font-family:'Bebas Neue',sans-serif; font-size:20px; color:#00FF00; }
+  .cart-item-qty { display:flex; align-items:center; gap:8px; margin-top:8px; }
+  .qty-btn { background:transparent; border:none; color:rgba(255,255,255,0.5); font-size:16px; transition:color 0.2s; cursor:pointer; }
+  .qty-btn:hover { color:#fff; }
+  .qty-num { font-size:13px; width:24px; text-align:center; }
+  .cart-remove { background:transparent; border:none; color:rgba(255,255,255,0.3); font-size:18px; transition:color 0.2s; align-self:flex-start; cursor:pointer; }
+  .cart-remove:hover { color:#ff4444; }
+  .cart-footer-panel { border-top:1px solid rgba(255,255,255,0.1); padding:24px; display:flex; flex-direction:column; gap:12px; }
+  .cart-total { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:rgba(255,255,255,0.6); }
+  .cart-total-num { font-family:'Bebas Neue',sans-serif; font-size:32px; color:#00FF00; }
+  .btn-checkout { width:100%; background:#00FF00; color:#000; border:none; padding:16px; font-size:13px; font-weight:700; letter-spacing:0.15em; border-radius:4px; transition:background 0.2s; cursor:pointer; font-family:'Inter',sans-serif; }
+  .btn-checkout:hover { background:#00DD00; }
+  .btn-clear { width:100%; background:transparent; border:none; color:rgba(255,255,255,0.5); font-size:13px; padding:8px; transition:color 0.2s; cursor:pointer; font-family:'Inter',sans-serif; }
+  .btn-clear:hover { color:#fff; }
+
+  /* MOBILE NAV */
+  .nav-hamburger { display:none; }
+  .mob-menu { display:none; position:fixed; inset:0; z-index:150; background:#000; flex-direction:column; align-items:center; justify-content:center; gap:28px; }
+  .mob-menu.open { display:flex; }
+  .mob-menu a { font-family:'Bebas Neue',sans-serif; font-size:3rem; letter-spacing:0.1em; color:rgba(255,255,255,0.7); text-decoration:none; }
+  .mob-menu a.active, .mob-menu a:hover { color:#00FF00; }
+
+  /* ANIMATIONS */
+  .anim-fade-up { opacity:0; transform:translateY(36px); transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+  .anim-fade-in { opacity:0; transition:opacity 0.8s ease; }
+  .anim-fade-left { opacity:0; transform:translateX(-32px); transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+  .anim-fade-right { opacity:0; transform:translateX(32px); transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+  .anim-scale-up { opacity:0; transform:scale(0.93); transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+  .anim-fade-up.is-visible,.anim-fade-in.is-visible,.anim-fade-left.is-visible,.anim-fade-right.is-visible,.anim-scale-up.is-visible { opacity:1; transform:none; }
+  .stagger-1{transition-delay:0.05s} .stagger-2{transition-delay:0.12s} .stagger-3{transition-delay:0.19s}
+  .stagger-4{transition-delay:0.26s} .stagger-5{transition-delay:0.33s} .stagger-6{transition-delay:0.40s}
+  @keyframes heroFadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+  .hero-anim-1 { animation:heroFadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.10s both; }
+  .hero-anim-2 { animation:heroFadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.28s both; }
+  .hero-anim-3 { animation:heroFadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.44s both; }
+  .hero-anim-4 { animation:heroFadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.58s both; }
+  @media (prefers-reduced-motion:reduce) {
+    .anim-fade-up,.anim-fade-in,.anim-fade-left,.anim-fade-right,.anim-scale-up,
+    .hero-anim-1,.hero-anim-2,.hero-anim-3,.hero-anim-4 { animation:none; transition:none; opacity:1; transform:none; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width:640px) {
+    body { overflow-x:hidden; }
+    .navbar { padding:16px 20px; }
+    .navbar-links { display:none; }
+    .nav-hamburger { display:flex; flex-direction:column; gap:5px; background:none; border:none; padding:4px; cursor:pointer; }
+    .nav-hamburger span { display:block; width:22px; height:2px; background:rgba(255,255,255,0.7); border-radius:1px; transition:all 0.25s; }
+    .nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .nav-hamburger.open span:nth-child(2){opacity:0}
+    .nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    .hero { padding:20px 20px 40px; min-height:100vh; }
+    .hero h1 { font-size:clamp(3rem,18vw,5rem); }
+    .hero-bio { font-size:13px; }
+    .section { padding:48px 18px; }
+    .projects-grid { grid-template-columns:1fr; gap:16px; }
+    .brands-section { padding:48px 0; }
+    .work-section { padding:24px 18px 64px; }
+    .showreel-card { aspect-ratio:16/9; }
+    .work-grid { grid-template-columns:1fr; gap:10px; }
+    .shop-section { padding:24px 18px 64px; }
+    .services-grid { grid-template-columns:1fr; }
+    .service-card:nth-child(1),.service-card:nth-child(3){border-right:none;border-bottom:1px solid rgba(255,255,255,0.1)}
+    .products-grid { grid-template-columns:repeat(2,1fr); gap:12px; }
+    .info-section { padding:24px 18px 64px; }
+    .info-grid { grid-template-columns:1fr; gap:40px; margin-bottom:40px; }
+    .avail-banner { padding:32px 20px; }
+    .cart-backdrop { align-items:flex-end; }
+    .cart-panel { max-width:100%; border-radius:16px 16px 0 0; }
+    footer .footer-inner { padding:40px 18px 24px; }
+    .footer-grid { grid-template-columns:1fr; gap:24px; }
+    .anim-fade-left,.anim-fade-right { transform:translateY(20px); }
+  }
+  @media (min-width:641px) and (max-width:900px) {
+    .navbar { padding:16px 24px; }
+    .section { padding:64px 24px; }
+    .projects-grid { grid-template-columns:repeat(2,1fr); }
+    .work-section,.shop-section,.info-section { padding-left:24px; padding-right:24px; }
+    .work-grid { grid-template-columns:repeat(2,1fr); }
+    .products-grid { grid-template-columns:repeat(3,1fr); }
+    .info-grid { grid-template-columns:1fr; gap:40px; }
+    .footer-grid { grid-template-columns:repeat(2,1fr); }
+    footer .footer-inner { padding-left:24px; padding-right:24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="navbar-logo" onclick="showPage('home')">ADARSH<span>.</span></div>
+  <div class="navbar-links">
+    <a href="#" onclick="showPage('home')" id="nav-home" class="active">HOME</a>
+    <a href="#" onclick="showPage('work')" id="nav-work">MY WORK</a>
+    <a href="#" onclick="showPage('shop')" id="nav-shop">SHOP</a>
+    <a href="#" onclick="showPage('info')" id="nav-info">INFO</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <button class="nav-hamburger" id="hamburger" onclick="toggleMobMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <button class="navbar-cart-btn" onclick="openCart()">🛍<span class="cart-count" id="cart-count">0</span></button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mob-menu" id="mobMenu">
+  <a href="#" onclick="mobGoTo('home')" id="mnav-home">HOME</a>
+  <a href="#" onclick="mobGoTo('work')" id="mnav-work">MY WORK</a>
+  <a href="#" onclick="mobGoTo('shop')" id="mnav-shop">SHOP</a>
+  <a href="#" onclick="mobGoTo('info')" id="mnav-info">INFO</a>
+</div>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-inner">
+      <h1 class="hero-anim-1">ADARSH GUPTA</h1>
+      <p class="hero-bio hero-anim-2">video editor, content creator, and designer pushing boundaries in digital content. crafting experiences that connect.</p>
+      <div class="hero-socials hero-anim-3">
+        <a class="social-link" href="https://www.instagram.com/ft.adiiiiiii/" target="_blank">
+          <div class="social-icon-wrap">&#128247;</div><span class="social-label">INSTAGRAM</span>
+        </a>
+        <a class="social-link" href="https://www.youtube.com/@Adarshgportfolio" target="_blank">
+          <div class="social-icon-wrap">&#9658;</div><span class="social-label">YOUTUBE</span>
+        </a>
+        <a class="social-link" href="https://www.fiverr.com/adarshoffcl/do-video-editing-and-3d-modelling-and-graphic-designing#" target="_blank">
+          <div class="social-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.25 16.25v-7.5H18v-2h-1.75V6c0-.69.56-1.25 1.25-1.25H18V2.5h-.5C15.57 2.5 14 4.07 14 6v.75h-1.5v2H14v7.5h2.25zM6 6.75C6 5.51 7.01 4.5 8.25 4.5S10.5 5.51 10.5 6.75 9.49 9 8.25 9 6 7.99 6 6.75zm4.25 9.5H6.5v-7.5H4.25v7.5H2.5V21h7.75v-4.75z"/></svg></div>
+          <span class="social-label">FIVERR</span>
+        </a>
+      </div>
+      <button class="scroll-btn hero-anim-4" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">
+        SCROLL TO EXPLORE<span class="scroll-arrow">&#8595;</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- SELECTED PROJECTS -->
+  <section id="projects" style="padding:96px 48px;border-top:1px solid rgba(255,255,255,0.05);">
+    <div style="max-width:1400px;margin:0 auto;">
+      <div class="section-header anim-fade-up" data-anim>
+        <h2 class="section-title">SELECTED <span class="green">PROJECTS</span></h2>
+        <p class="section-sub">RECENT WORK</p>
+      </div>
+      <div class="projects-grid">
+
+  <!-- Card 1: 11LABS AD -->
+  <div class="project-card anim-scale-up stagger-1" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)">
+    <img src="11labs ad.png" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" class="proj-poster" />
+    <div class="project-overlay"><div class="proj-play">&#9658;</div></div>
+    <div class="project-info">
+      <div class="project-cat">SAAS ANIMATION</div>
+      <div class="project-title">11LABS AD</div>
+      <div class="project-dur">0:18</div>
+    </div>
+    <div class="project-border-fx"></div>
+  </div>
+
+  <!-- Card 2: DATE VENUE REVEAL -->
+  <div class="project-card anim-scale-up stagger-2" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)">
+    <img src="date venue reveal.png" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" class="proj-poster" />
+    <div class="project-overlay"><div class="proj-play">&#9658;</div></div>
+    <div class="project-info">
+      <div class="project-cat">SHORT TRAILER</div>
+      <div class="project-title">DATE VENUE REVEAL</div>
+      <div class="project-dur">0:17</div>
+    </div>
+    <div class="project-border-fx"></div>
+  </div>
+
+  <!-- Card 3: THAT'S WHAT I LIKE -->
+  <div class="project-card anim-scale-up stagger-3" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)">
+    <img src="thats what i like.png" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" class="proj-poster" />
+    <div class="project-overlay"><div class="proj-play">&#9658;</div></div>
+    <div class="project-info">
+      <div class="project-cat">MOTION GRAPHICS</div>
+      <div class="project-title">THAT'S WHAT I LIKE</div>
+      <div class="project-dur">0:15</div>
+    </div>
+    <div class="project-border-fx"></div>
+  </div>
+
+  <!-- Card 4: VOLTAIRE TRAILER -->
+  <div class="project-card anim-scale-up stagger-4" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)">
+    <img src="voltaire trailer.png" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" class="proj-poster" />
+    <div class="project-overlay"><div class="proj-play">&#9658;</div></div>
+    <div class="project-info">
+      <div class="project-cat">LOGO ANIMATION</div>
+      <div class="project-title">VOLTAIRE TRAILER</div>
+      <div class="project-dur">0:24</div>
+    </div>
+    <div class="project-border-fx"></div>
+  </div>
+
+  <!-- Card 5: IPHONE ANIMATION -->
+  <div class="project-card anim-scale-up stagger-5" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)">
+    <img src="iphone animation.png" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" class="proj-poster" />
+    <div class="project-overlay"><div class="proj-play">&#9658;</div></div>
+    <div class="project-info">
+      <div class="project-cat">UI ANIMATION</div>
+      <div class="project-title">IPHONE ANIMATION</div>
+      <div class="project-dur">0:06</div>
+    </div>
+    <div class="project-border-fx"></div>
+  </div>
+
+  <!-- Card 6: VENUE REVEAL -->
+  <div class="project-card anim-scale-up stagger-6" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)">
+    <img src="venue reveal.png" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" class="proj-poster" />
+    <div class="project-overlay"><div class="proj-play">&#9658;</div></div>
+    <div class="project-info">
+      <div class="project-cat">SHORT EDIT</div>
+      <div class="project-title">VENUE REVEAL</div>
+      <div class="project-dur">0:20</div>
+    </div>
+    <div class="project-border-fx"></div>
+  </div>
+
+</div>
+    </div>
+  </section>
+
+  <!-- BRANDS -->
+  <section class="brands-section">
+    <div style="max-width:1400px;margin:0 auto;">
+      <h2 class="brands-title anim-fade-up" data-anim>WORKED <span class="green">WITH</span></h2>
+      <div class="brands-overflow anim-fade-in" data-anim>
+        <div class="brands-track">
+          <span class="brand-item">VoltaireMUN</span><span class="brand-item">BharatMUN</span><span class="brand-item">Peak Perspective</span><span class="brand-item">XAVMUN</span><span class="brand-item">Pixelorylab</span>
+          <span class="brand-item">VoltaireMUN</span><span class="brand-item">BharatMUN</span><span class="brand-item">Peak Perspective</span><span class="brand-item">XAVMUN</span><span class="brand-item">Pixelorylab</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- MY WORK -->
+<div class="page" id="page-work">
+  <div class="work-section">
+    <div class="section-header anim-fade-up" data-anim>
+      <h1 class="section-title">MY <span class="green">WORK</span></h1>
+      <p class="section-sub">PORTFOLIO SHOWCASE</p>
+    </div>
+
+    <!-- Featured Showreel -->
+    <div class="showreel-card anim-scale-up" data-anim onmouseenter="playVidAudio(this)" onmouseleave="pauseVid(this)">
+      <img class="vid-poster" src="showreel.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;" />
+      <video muted playsinline loop preload="none" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;">
+        <source src="showreel-copy.mp4" type="video/mp4">
+      </video>
+      <div class="showreel-badge">&#9733; FEATURED SHOWREEL</div>
+      <div class="showreel-overlay"><div class="showreel-play">&#9658;</div></div>
+      <div class="showreel-info">
+        <div><div class="showreel-cat">SHOWREEL</div><div class="showreel-title">SHOWREEL</div></div>
+        <span class="showreel-dur">0:04</span>
+      </div>
+      <div class="showreel-border"></div>
+    </div>
+
+    <!-- 6 Videos -->
+    <div class="work-grid" style="margin-top:0;">
+ 
+      <div class="video-card anim-scale-up stagger-1" data-anim onmouseenter="playVidAudio(this)" onmouseleave="pauseVid(this)">
+        <img class="vid-poster" src="apocalpyse.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;" />
+        <video muted playsinline loop preload="none" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;">
+          <source src="apocalypse_1.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"><div class="play-circle">&#9658;</div></div>
+        <div class="video-info"><div class="video-meta"><div class="v-cat">FLOW EDIT</div><div class="v-title">APOCALYPSE</div></div><span class="v-duration">0:19</span></div>
+        <div class="video-border-fx"></div>
+      </div>
+ 
+      <div class="video-card anim-scale-up stagger-2" data-anim onmouseenter="playVidAudio(this)" onmouseleave="pauseVid(this)">
+        <img class="vid-poster" src="aftermovie.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;" />
+        <video muted playsinline loop preload="none" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;">
+          <source src="aftermovie 2.0.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"><div class="play-circle">&#9658;</div></div>
+        <div class="video-info"><div class="video-meta"><div class="v-cat">AFTERMOVIE</div><div class="v-title">AFTERMOVIE 2.0</div></div><span class="v-duration">0:07</span></div>
+        <div class="video-border-fx"></div>
+      </div>
+ 
+      <div class="video-card anim-scale-up stagger-3" data-anim onmouseenter="playVidAudio(this)" onmouseleave="pauseVid(this)">
+        <img class="vid-poster" src="date reveal.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;" />
+        <video muted playsinline loop preload="none" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;">
+          <source src="main.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"><div class="play-circle">&#9658;</div></div>
+        <div class="video-info"><div class="video-meta"><div class="v-cat">MOTION GRAPHICS</div><div class="v-title">Date Reveal</div></div><span class="v-duration">0:14</span></div>
+        <div class="video-border-fx"></div>
+      </div>
+ 
+      <div class="video-card anim-scale-up stagger-4" data-anim onmouseenter="playVidAudio(this)" onmouseleave="pauseVid(this)">
+        <img class="vid-poster" src="destination edit.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;" />
+        <video muted playsinline loop preload="none" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;">
+          <source src="apple ui animation.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"><div class="play-circle">&#9658;</div></div>
+        <div class="video-info"><div class="video-meta"><div class="v-cat">UI ANIMATION</div><div class="v-title">destination edit</div></div><span class="v-duration">0:20</span></div>
+        <div class="video-border-fx"></div>
+      </div>
+ 
+      <div class="video-card anim-scale-up stagger-5" data-anim onmouseenter="playVidAudio(this)" onmouseleave="pauseVid(this)">
+        <img class="vid-poster" src="ameircan baddie.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;" />
+        <video muted playsinline loop preload="none" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;">
+          <source src="personal project .mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"><div class="play-circle">&#9658;</div></div>
+        <div class="video-info"><div class="video-meta"><div class="v-cat">MOTION GRAPHICS</div><div class="v-title">AMERICAN BADDIE EDIT</div></div><span class="v-duration">0:10</span></div>
+        <div class="video-border-fx"></div>
+      </div>
+ 
+      <div class="video-card anim-scale-up stagger-6" data-anim onmouseenter="playVidAudio(this)" onmouseleave="pauseVid(this)">
+        <img class="vid-poster" src="louvre edit.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;" />
+        <video muted playsinline loop preload="none" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;">
+          <source src="LOUVRE.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"><div class="play-circle">&#9658;</div></div>
+        <div class="video-info"><div class="video-meta"><div class="v-cat">FLOW EDIT</div><div class="v-title">LOUVRE EDIT</div></div><span class="v-duration">0:20</span></div>
+        <div class="video-border-fx"></div>
+      </div>
+ 
+    </div>
+
+    <div class="cta-block">
+      <h2 class="anim-fade-up" data-anim>INTERESTED IN WORKING TOGETHER?</h2>
+      <p class="anim-fade-up stagger-1" data-anim>let's create something extraordinary. reach out to discuss your next project.</p>
+      <button class="btn-primary anim-fade-up stagger-2" data-anim onclick="showPage('info')">GET IN TOUCH</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHOP -->
+<div class="page" id="page-shop">
+  <div class="shop-section">
+    <div class="section-header anim-fade-up" data-anim>
+      <h1 class="section-title">SERVICES</h1>
+      <p class="section-sub">WHAT I OFFER</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card anim-fade-up stagger-1" data-anim>
+        <div class="service-head"><span class="service-name">BASIC</span><span class="service-price">&#8377;900</span></div>
+        <p class="service-desc">Clean, simple, and fast video editing for short content with smooth cuts and basic transitions.</p>
+        <ul class="service-features">
+          <li><span class="feat-dot"></span>Up to 1 Minute</li>
+          <li><span class="feat-dot"></span>1-Day Delivery</li>
+          <li><span class="feat-dot"></span>Basic Color Grading</li>
+          <li><span class="feat-dot"></span>Unlimited Revisions</li>
+        </ul>
+        <button class="btn-service" onclick="showPage('info')">GET STARTED</button>
+      </div>
+      <div class="service-card anim-fade-up stagger-2" data-anim>
+        <div class="service-head"><span class="service-name">STANDARD</span><span class="service-price">&#8377;1,800</span></div>
+        <p class="service-desc">A polished, professional edit with advanced transitions, sound design, and color grading.</p>
+        <ul class="service-features">
+          <li><span class="feat-dot"></span>Up to 5 Minutes</li>
+          <li><span class="feat-dot"></span>2-Day Delivery</li>
+          <li><span class="feat-dot"></span>Advanced Color Grading</li>
+          <li><span class="feat-dot"></span>Unlimited Revisions</li>
+        </ul>
+        <button class="btn-service" onclick="showPage('info')">GET STARTED</button>
+      </div>
+      <div class="service-card anim-fade-up stagger-3" data-anim style="display:flex;flex-direction:column;">
+        <div class="service-head"><span class="service-name">PREMIUM</span><span class="service-price">&#8377;3,400</span></div>
+        <p class="service-desc">High-end editing with motion graphics, SFX, and storytelling — custom edit tailored to you.</p>
+        <ul class="service-features" style="flex:1;">
+          <li><span class="feat-dot"></span>Up to 15 Minutes</li>
+          <li><span class="feat-dot"></span>4-Day Delivery</li>
+          <li><span class="feat-dot"></span>Motion Graphics &amp; SFX</li>
+          <li><span class="feat-dot"></span>Unlimited Revisions</li>
+        </ul>
+        <button class="btn-service" onclick="showPage('info')">GET STARTED</button>
+      </div>
+      <div class="service-card anim-fade-up stagger-4" data-anim style="display:flex;flex-direction:column;">
+        <div class="service-head"><span class="service-name">DESIGN PACKAGE</span><span class="service-price">Custom</span></div>
+        <p class="service-desc">Custom design work using Photoshop and After Effects — thumbnails, brand assets, and more.</p>
+        <ul class="service-features" style="flex:1;">
+          <li><span class="feat-dot"></span>Thumbnail Design</li>
+          <li><span class="feat-dot"></span>Brand Identity</li>
+          <li><span class="feat-dot"></span>After Effects Graphics</li>
+          <li><span class="feat-dot"></span>Source Files Included</li>
+        </ul>
+        <button class="btn-service" onclick="showPage('info')">GET STARTED</button>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section-header anim-fade-up" data-anim>
+      <h2 class="section-title">PROJECT <span class="green">FILES</span></h2>
+      <p class="section-sub">DIGITAL PRODUCTS</p>
+    </div>
+    <div class="products-grid">
+      <div class="product-card anim-scale-up stagger-1" data-anim><span class="prod-badge">COMING SOON</span><div class="prod-img"><img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&q=80" alt="" /></div><div class="prod-body"><div class="prod-cat">COLOR GRADING</div><div class="prod-title">CINEMATIC LUT PACK</div><div class="prod-desc">Coming Soon</div><div class="prod-footer"><span class="prod-price">&#8212;</span><span class="prod-size">&#8212;</span></div><button class="btn-add" disabled>&#128717; COMING SOON</button></div></div>
+      <div class="product-card anim-scale-up stagger-2" data-anim><span class="prod-badge">COMING SOON</span><div class="prod-img"><img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=600&q=80" alt="" /></div><div class="prod-body"><div class="prod-cat">EFFECTS</div><div class="prod-title">TRANSITION PACK</div><div class="prod-desc">Coming Soon</div><div class="prod-footer"><span class="prod-price">&#8212;</span><span class="prod-size">&#8212;</span></div><button class="btn-add" disabled>&#128717; COMING SOON</button></div></div>
+      <div class="product-card anim-scale-up stagger-3" data-anim><span class="prod-badge">COMING SOON</span><div class="prod-img"><img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&q=80" alt="" /></div><div class="prod-body"><div class="prod-cat">AUDIO</div><div class="prod-title">SOUND EFFECTS LIBRARY</div><div class="prod-desc">Coming Soon</div><div class="prod-footer"><span class="prod-price">&#8212;</span><span class="prod-size">&#8212;</span></div><button class="btn-add" disabled>&#128717; COMING SOON</button></div></div>
+      <div class="product-card anim-scale-up stagger-4" data-anim><span class="prod-badge">COMING SOON</span><div class="prod-img"><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&q=80" alt="" /></div><div class="prod-body"><div class="prod-cat">MOTION GRAPHICS</div><div class="prod-title">MOTION GRAPHICS PACK</div><div class="prod-desc">Coming Soon</div><div class="prod-footer"><span class="prod-price">&#8212;</span><span class="prod-size">&#8212;</span></div><button class="btn-add" disabled>&#128717; COMING SOON</button></div></div>
+      <div class="product-card anim-scale-up stagger-5" data-anim><span class="prod-badge">COMING SOON</span><div class="prod-img"><img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&q=80" alt="" /></div><div class="prod-body"><div class="prod-cat">PRESETS</div><div class="prod-title">AFTER EFFECTS PRESETS</div><div class="prod-desc">Coming Soon</div><div class="prod-footer"><span class="prod-price">&#8212;</span><span class="prod-size">&#8212;</span></div><button class="btn-add" disabled>&#128717; COMING SOON</button></div></div>
+      <div class="product-card anim-scale-up stagger-6" data-anim><span class="prod-badge">COMING SOON</span><div class="prod-img"><img src="https://images.unsplash.com/photo-1557838923-2985c318be48?w=600&q=80" alt="" /></div><div class="prod-body"><div class="prod-cat">BUNDLE</div><div class="prod-title">COMPLETE EDITOR BUNDLE</div><div class="prod-desc">Coming Soon</div><div class="prod-footer"><span class="prod-price">&#8212;</span><span class="prod-size">&#8212;</span></div><button class="btn-add" disabled>&#128717; COMING SOON</button></div></div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section-header anim-fade-up" data-anim style="text-align:center;">
+      <h2 class="section-title">FAQ</h2>
+      <p class="section-sub">FREQUENTLY ASKED QUESTIONS</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item anim-fade-up stagger-1" data-anim><button class="faq-btn" onclick="toggleFaq(this)">What editing software do you use? <span class="faq-chevron">&#8964;</span></button><div class="faq-answer"><p>I primarily use Adobe After Effects and Adobe Premiere Pro for video editing, and Adobe Photoshop for design work.</p></div></div>
+      <div class="faq-item anim-fade-up stagger-2" data-anim><button class="faq-btn" onclick="toggleFaq(this)">How do you deliver the final files? <span class="faq-chevron">&#8964;</span></button><div class="faq-answer"><p>Final files are delivered via Google Drive or Dropbox as high-quality MP4 exports.</p></div></div>
+      <div class="faq-item anim-fade-up stagger-3" data-anim><button class="faq-btn" onclick="toggleFaq(this)">How many revisions do I get? <span class="faq-chevron">&#8964;</span></button><div class="faq-answer"><p>All packages include unlimited revisions. I work until you're 100% happy.</p></div></div>
+      <div class="faq-item anim-fade-up stagger-4" data-anim><button class="faq-btn" onclick="toggleFaq(this)">What is your typical turnaround time? <span class="faq-chevron">&#8964;</span></button><div class="faq-answer"><p>Basic: 1 day, Standard: 2 days, Premium: 4 days.</p></div></div>
+      <div class="faq-item anim-fade-up stagger-5" data-anim><button class="faq-btn" onclick="toggleFaq(this)">Can you create motion graphics and animations? <span class="faq-chevron">&#8964;</span></button><div class="faq-answer"><p>Yes! Motion graphics and animations are a core part of what I do.</p></div></div>
+      <div class="faq-item anim-fade-up stagger-6" data-anim><button class="faq-btn" onclick="toggleFaq(this)">Do you work with international clients? <span class="faq-chevron">&#8964;</span></button><div class="faq-answer"><p>Absolutely. I work with clients worldwide via email or messaging.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- INFO -->
+<div class="page" id="page-info">
+  <div class="info-section">
+    <div class="section-header anim-fade-up" data-anim>
+      <h1 class="section-title"><span class="green">INFO</span> &amp; CONTACT</h1>
+      <p class="section-sub">LET'S CONNECT</p>
+    </div>
+    <div class="info-grid">
+      <div class="anim-fade-left" data-anim>
+        <h2 class="about-title">ABOUT <span class="green">ME</span></h2>
+        <p class="about-body">i've been making things on the internet since i was 14. started with youtube videos in my bedroom, now i work with some of the best people. i don't do agencies, i don't do meetings that could be emails. i just make stuff that connects. every project is a chance to push boundaries and create something that resonates.</p>
+        <div class="stats-grid">
+          <div class="anim-fade-up stagger-1" data-anim><div class="stat-num">5+</div><div class="stat-label">YEARS EXPERIENCE</div></div>
+          <div class="anim-fade-up stagger-2" data-anim><div class="stat-num">100+</div><div class="stat-label">PROJECTS COMPLETED</div></div>
+          <div class="anim-fade-up stagger-3" data-anim><div class="stat-num">20+</div><div class="stat-label">HAPPY CLIENTS</div></div>
+          <div class="anim-fade-up stagger-4" data-anim><div class="stat-num">&#8734;</div><div class="stat-label">REVISIONS</div></div>
+        </div>
+        <div class="contact-details">
+          <div class="contact-row"><span class="contact-icon">&#9993;</span> <a href="mailto:gadarshx08@gmail.com" style="color:inherit;text-decoration:none;">gadarshx08@gmail.com</a></div>
+          <div class="contact-row"><span class="contact-icon">&#128205;</span> Gurugram, India</div>
+        </div>
+      </div>
+      <div class="anim-fade-right" data-anim>
+        <h2 class="contact-form-title">GET IN <span class="green">TOUCH</span></h2>
+        <form id="contact-form" onsubmit="handleFormSubmit(event)">
+          <div class="form-group"><label class="form-label">YOUR NAME</label><input class="form-input" type="text" name="name" placeholder="John Doe" required /></div>
+          <div class="form-group"><label class="form-label">YOUR EMAIL</label><input class="form-input" type="email" name="from_email" placeholder="john@example.com" required /></div>
+          <div class="form-group">
+            <span class="pkg-label">INTERESTED PACKAGE</span>
+            <div class="pkg-options">
+              <div class="pkg-option"><input type="radio" name="package" id="pkg-basic" value="Basic" /><label for="pkg-basic">Basic</label></div>
+              <div class="pkg-option"><input type="radio" name="package" id="pkg-standard" value="Standard" /><label for="pkg-standard">Standard</label></div>
+              <div class="pkg-option"><input type="radio" name="package" id="pkg-premium" value="Premium" /><label for="pkg-premium">Premium</label></div>
+              <div class="pkg-option"><input type="radio" name="package" id="pkg-custom" value="Custom" /><label for="pkg-custom">Custom</label></div>
+              <div class="pkg-option"><input type="radio" name="package" id="pkg-none" value="None" checked /><label for="pkg-none">None</label></div>
+            </div>
+          </div>
+          <div class="form-group"><label class="form-label">SUBJECT</label><input class="form-input" type="text" name="subject" placeholder="Project Inquiry" required /></div>
+          <div class="form-group"><label class="form-label">MESSAGE</label><textarea class="form-input" name="message" placeholder="Tell me about your project..." required></textarea></div>
+          <button type="submit" class="btn-submit" id="submit-btn">&#9993; SEND MESSAGE</button>
+        </form>
+        <div class="form-success" id="form-success">
+          <div class="success-circle">&#10003;</div>
+          <div class="success-title">MESSAGE SENT!</div>
+          <div class="success-sub">I'll get back to you soon.</div>
+        </div>
+      </div>
+    </div>
+    <div class="avail-banner anim-scale-up" data-anim>
+      <h3>CURRENTLY ACCEPTING <span class="green">NEW PROJECTS</span></h3>
+      <p>looking for collaborations on exciting creative projects. whether it's a commercial, motion graphics, or aftermovie, let's make something unforgettable.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="anim-fade-up stagger-1" data-anim>
+        <div class="footer-brand">ADARSH<span>.</span></div>
+        <div class="footer-role">editor . creator . designer</div>
+      </div>
+      <div class="anim-fade-up stagger-2" data-anim>
+        <div class="footer-col-title">CONNECT</div>
+        <div class="footer-text"><a href="mailto:gadarshx08@gmail.com" style="color:inherit;text-decoration:none;">gadarshx08@gmail.com</a></div>
+        <div class="footer-text">Gurugram, India</div>
+      </div>
+      <div class="anim-fade-up stagger-3" data-anim>
+        <div class="footer-col-title">FOLLOW</div>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/ft.adiiiiiii/" target="_blank" class="footer-social">&#128247;</a>
+          <a href="https://www.youtube.com/@Adarshgportfolio" target="_blank" class="footer-social">&#9658;</a>
+          <a href="https://www.fiverr.com/adarshoffcl/do-video-editing-and-3d-modelling-and-graphic-designing#" target="_blank" class="footer-social">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.25 16.25v-7.5H18v-2h-1.75V6c0-.69.56-1.25 1.25-1.25H18V2.5h-.5C15.57 2.5 14 4.07 14 6v.75h-1.5v2H14v7.5h2.25zM6 6.75C6 5.51 7.01 4.5 8.25 4.5S10.5 5.51 10.5 6.75 9.49 9 8.25 9 6 7.99 6 6.75zm4.25 9.5H6.5v-7.5H4.25v7.5H2.5V21h7.75v-4.75z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copy anim-fade-in" data-anim>&#169; 2026 ADARSH GUPTA. ALL RIGHTS RESERVED.</div>
+  </div>
+</footer>
+
+<!-- CART -->
+<div class="cart-backdrop" id="cart-backdrop" onclick="closeCartOnBackdrop(event)">
+  <div class="cart-panel">
+    <div class="cart-header"><h2>CART</h2><button class="cart-close" onclick="closeCart()">&#10005;</button></div>
+    <div class="cart-body" id="cart-body"><div class="cart-empty">Your cart is empty</div></div>
+    <div class="cart-footer-panel" id="cart-footer" style="display:none;">
+      <div class="cart-total"><span>TOTAL</span><span class="cart-total-num" id="cart-total">$0</span></div>
+      <button class="btn-checkout">CHECKOUT</button>
+      <button class="btn-clear" onclick="clearCart()">CLEAR CART</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ─── VIMEO HOVER PLAY/PAUSE ──────────────────────────────────────────────────
+  var vimeoPlayers = new WeakMap();
+
+  function getVimeoPlayer(card) {
+    var iframe = card.querySelector('iframe');
+    if (!iframe) return null;
+    if (!vimeoPlayers.has(iframe)) {
+      vimeoPlayers.set(iframe, new Vimeo.Player(iframe));
+    }
+    return vimeoPlayers.get(iframe);
+  }
+
+  function vimeoPlay(card) {
+    var player = getVimeoPlayer(card);
+    if (player) player.play().catch(function(){});
+  }
+
+  function vimeoPause(card) {
+    var player = getVimeoPlayer(card);
+    if (player) {
+      player.pause().catch(function(){});
+      player.setCurrentTime(0).catch(function(){});
+    }
+  }
+
+  // ─── NATIVE VIDEO HOVER PLAY/PAUSE ──────────────────────────────────────────
+  // Muted-only play (showreel stays silent)
+  function playVid(card) {
+    var v = card.querySelector('video');
+    if (v) { v.muted = true; v.play(); }
+  }
+
+  // Play muted first (satisfies browser autoplay policy), then unmute once playing
+  function playVidAudio(card) {
+  var v = card.querySelector('video');
+  var poster = card.querySelector('.vid-poster');
+  if (!v) return;
+  if (poster) poster.style.display = 'none';
+  v.style.display = 'block';
+  v.style.zIndex = '2';
+  v.muted = true;
+  var playPromise = v.play();
+  if (playPromise !== undefined) {
+    playPromise.then(function() {
+      v.muted = false;
+      v.volume = 0.7;
+    }).catch(function() {});
+  }
+}
+
+  // Pause, reset, remute on mouse leave
+  function pauseVid(card) {
+  var v = card.querySelector('video');
+  var poster = card.querySelector('.vid-poster');
+  if (v) { v.pause(); v.currentTime = 0; v.muted = true; v.style.display = 'none'; v.style.zIndex = ''; }
+  if (poster) poster.style.display = 'block';
+}
+
+  function playProjectCard(card) {
+  var img = card.querySelector('.proj-poster');
+  var sources = {
+    '11LABS AD': '11labs ad _1.mp4',
+    'DATE VENUE REVEAL': 'date venue reveal .mp4',
+    "THAT'S WHAT I LIKE": 'thats what i like.mp4',
+    'VOLTAIRE TRAILER': 'voltaire trailer.mp4',
+    'IPHONE ANIMATION': 'animation.mp4',
+    'VENUE REVEAL': 'venue.mp4'
+  };
+  var title = card.querySelector('.project-title').textContent;
+  var src = sources[title];
+  if (!src || card.querySelector('video')) return;
+  if (img) img.style.display = 'none';
+  var v = document.createElement('video');
+  v.src = src;
+  v.muted = true;
+  v.playsinline = true;
+  v.loop = true;
+  v.style.cssText = 'width:100%;height:100%;object-fit:cover;position:absolute;inset:0;';
+  card.insertBefore(v, card.firstChild);
+  v.play().then(function() {
+    v.muted = false;
+    v.volume = 0.7;
+  }).catch(function(){});
+}
+
+function pauseProjectCard(card) {
+  var v = card.querySelector('video');
+  var img = card.querySelector('.proj-poster');
+  if (v) { v.pause(); v.muted = true; v.src = ''; card.removeChild(v); }
+  if (img) img.style.display = '';
+}
+
+  // ─── SCROLL ANIMATIONS ───────────────────────────────────────────────────────
+  function observeAll() {
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-visible');
+        // Preload any video inside this card
+        var v = e.target.querySelector('video');
+        if (v) { v.preload = 'auto'; v.load(); }
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('[data-anim]').forEach(function(el) {
+    if (!el.classList.contains('is-visible')) io.observe(el);
+  });
+}
+  observeAll();
+
+  // ─── PAGE NAV ────────────────────────────────────────────────────────────────
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+    document.querySelectorAll('.navbar-links a').forEach(function(a) { a.classList.remove('active'); });
+    document.getElementById('page-' + name).classList.add('active');
+    document.getElementById('nav-' + name).classList.add('active');
+    window.scrollTo({ top: 0 });
+    history.replaceState(null, '', '#' + name);
+    setTimeout(observeAll, 80);
+  }
+  (function() {
+    var hash = window.location.hash.replace('#', '');
+    if (['home','work','shop','info'].indexOf(hash) !== -1) showPage(hash);
+  })();
+
+  // ─── FAQ ─────────────────────────────────────────────────────────────────────
+  function toggleFaq(btn) {
+    var answer = btn.nextElementSibling;
+    var chevron = btn.querySelector('.faq-chevron');
+    var isOpen = answer.classList.contains('open');
+    document.querySelectorAll('.faq-answer').forEach(function(a) { a.classList.remove('open'); });
+    document.querySelectorAll('.faq-chevron').forEach(function(c) { c.style.transform = ''; });
+    if (!isOpen) { answer.classList.add('open'); chevron.style.transform = 'rotate(180deg)'; }
+  }
+
+  // ─── CART ────────────────────────────────────────────────────────────────────
+  var cart = [];
+  function openCart() { document.getElementById('cart-backdrop').classList.add('open'); renderCart(); }
+  function closeCart() { document.getElementById('cart-backdrop').classList.remove('open'); }
+  function closeCartOnBackdrop(e) { if (e.target === document.getElementById('cart-backdrop')) closeCart(); }
+  function addToCart(product) {
+    var existing = cart.find(function(i) { return i.id === product.id; });
+    if (existing) existing.quantity++;
+    else cart.push(Object.assign({}, product, { quantity: 1 }));
+    updateCartCount(); openCart();
+  }
+  function removeFromCart(id) { cart = cart.filter(function(i) { return i.id !== id; }); updateCartCount(); renderCart(); }
+  function updateQty(id, qty) {
+    if (qty <= 0) { removeFromCart(id); return; }
+    cart = cart.map(function(i) { return i.id === id ? Object.assign({}, i, { quantity: qty }) : i; });
+    renderCart();
+  }
+  function clearCart() { cart = []; updateCartCount(); renderCart(); }
+  function getTotal() { return cart.reduce(function(t, i) { return t + i.price * i.quantity; }, 0); }
+  function updateCartCount() {
+    var count = cart.reduce(function(t, i) { return t + i.quantity; }, 0);
+    var el = document.getElementById('cart-count');
+    el.textContent = count;
+    count > 0 ? el.classList.add('show') : el.classList.remove('show');
+  }
+  function renderCart() {
+    var body = document.getElementById('cart-body');
+    var footer = document.getElementById('cart-footer');
+    if (cart.length === 0) { body.innerHTML = '<div class="cart-empty">Your cart is empty</div>'; footer.style.display = 'none'; return; }
+    body.innerHTML = cart.map(function(item) {
+      return '<div class="cart-item"><img src="' + item.image + '" alt="' + item.title + '" /><div class="cart-item-info"><div class="cart-item-title">' + item.title + '</div><div class="cart-item-price">$' + item.price + '</div><div class="cart-item-qty"><button class="qty-btn" onclick="updateQty(' + item.id + ',' + (item.quantity-1) + ')">&#8722;</button><span class="qty-num">' + item.quantity + '</span><button class="qty-btn" onclick="updateQty(' + item.id + ',' + (item.quantity+1) + ')">+</button></div></div><button class="cart-remove" onclick="removeFromCart(' + item.id + ')">&#128465;</button></div>';
+    }).join('');
+    document.getElementById('cart-total').textContent = '$' + getTotal();
+    footer.style.display = 'flex';
+  }
+
+  // ─── CONTACT FORM ────────────────────────────────────────────────────────────
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    var btn = document.getElementById('submit-btn');
+    var form = document.getElementById('contact-form');
+
+    var selectedPackage = form.querySelector('input[name="package"]:checked');
+
+    var templateParams = {
+      name:       form.querySelector('[name="name"]').value,
+      from_email: form.querySelector('[name="from_email"]').value,
+      subject:    form.querySelector('[name="subject"]').value,
+      message:    form.querySelector('[name="message"]').value,
+      package:    selectedPackage ? selectedPackage.value : 'None'
+    };
+
+    btn.textContent = 'SENDING...'; btn.disabled = true;
+
+    emailjs.send('service_lgtlwgp', 'template_ppa7gci', templateParams)
+      .then(function() {
+        form.style.display = 'none';
+        document.getElementById('form-success').classList.add('show');
+        btn.textContent = 'SEND MESSAGE'; btn.disabled = false;
+        setTimeout(function() {
+          document.getElementById('form-success').classList.remove('show');
+          form.reset();
+          form.style.display = 'block';
+        }, 3000);
+      }, function(error) {
+        btn.textContent = 'SEND MESSAGE'; btn.disabled = false;
+        alert('Failed to send. Please email gadarshx08@gmail.com directly.');
+        console.error(error);
+      });
+  }
+
+  // ─── MOBILE NAV ──────────────────────────────────────────────────────────────
+  function toggleMobMenu() {
+    var hb = document.getElementById('hamburger');
+    var mm = document.getElementById('mobMenu');
+    hb.classList.toggle('open');
+    mm.classList.toggle('open');
+    document.body.style.overflow = mm.classList.contains('open') ? 'hidden' : '';
+  }
+
+  function mobGoTo(page) {
+    toggleMobMenu();
+    showPage(page);
+  }
+</script>
+</body>
+</html>
