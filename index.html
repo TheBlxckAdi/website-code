@@ -75,7 +75,7 @@
   .project-cat { font-size:10px; font-weight:500; letter-spacing:0.2em; color:#00FF00; margin-bottom:6px; }
   .project-title { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:0.1em; }
   .project-dur { font-size:11px; color:rgba(255,255,255,0.4); margin-top:4px; }
-  .project-border-fx { position:absolute; inset:0; border:2px solid #00FF00; opacity:0; transition:opacity 0.3s; pointer-events:none; z-index:4; }
+  .project-border-fx { position:absolute; inset:0; box-shadow:inset 0 0 0 2px #00FF00; opacity:0; transition:opacity 0.3s; pointer-events:none; z-index:4; }
   .project-card:hover .project-border-fx { opacity:1; }
 
   /* BRANDS */
@@ -102,7 +102,7 @@
   .video-meta .v-cat { font-size:10px; font-weight:500; letter-spacing:0.2em; color:#00FF00; margin-bottom:4px; }
   .video-meta .v-title { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:0.1em; }
   .v-duration { font-size:13px; color:rgba(255,255,255,0.4); }
-  .video-border-fx { position:absolute; inset:0; border:2px solid #00FF00; opacity:0; transition:opacity 0.3s; pointer-events:none; }
+  .video-border-fx { position:absolute; inset:0; box-shadow:inset 0 0 0 2px #00FF00; opacity:0; transition:opacity 0.3s; pointer-events:none; }
   .video-card:hover .video-border-fx { opacity:1; }
 
   /* SHOWREEL */
@@ -119,7 +119,7 @@
   .showreel-cat { font-size:10px; font-weight:500; letter-spacing:0.2em; color:#00FF00; margin-bottom:6px; }
   .showreel-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.6rem,3vw,2.6rem); letter-spacing:0.08em; }
   .showreel-dur { font-size:13px; color:rgba(255,255,255,0.4); }
-  .showreel-border { position:absolute; inset:0; border:2px solid #00FF00; opacity:0; transition:opacity 0.3s; pointer-events:none; border-radius:4px; }
+  .showreel-border { position:absolute; inset:0; box-shadow:inset 0 0 0 2px #00FF00; opacity:0; transition:opacity 0.3s; pointer-events:none; border-radius:4px; }
   .showreel-card:hover .showreel-border { opacity:1; }
 
   /* CTA */
@@ -793,7 +793,6 @@
   v.style.display = 'block';
   v.style.zIndex = '2';
   v.muted = true;
-  if (v.readyState === 0) { v.preload = 'auto'; v.load(); }
   var playPromise = v.play();
   if (playPromise !== undefined) {
     playPromise.then(function() {
@@ -851,6 +850,9 @@ function pauseProjectCard(card) {
     entries.forEach(function(e) {
       if (e.isIntersecting) {
         e.target.classList.add('is-visible');
+        // Preload any video inside this card
+        var v = e.target.querySelector('video');
+        if (v) { v.preload = 'auto'; v.load(); }
         io.unobserve(e.target);
       }
     });
