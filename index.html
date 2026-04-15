@@ -847,67 +847,69 @@
   return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth <= 768;
 }
 
+// Create overlay once and reuse it
+var fsOverlay = null;
+var fsVideo = null;
+
+function createFullscreenOverlay() {
+  if (fsOverlay) return;
+
+  fsOverlay = document.createElement('div');
+  fsOverlay.style.cssText = 'display:none;position:fixed;inset:0;z-index:99999;background:#000;align-items:center;justify-content:center;';
+
+  fsVideo = document.createElement('video');
+  fsVideo.playsInline = true;
+  fsVideo.controls = true;
+  fsVideo.autoplay = true;
+  fsVideo.style.cssText = 'width:100%;height:100%;object-fit:contain;max-height:100vh;';
+
+  var closeBtn = document.createElement('button');
+  closeBtn.innerHTML = '&#10005;';
+  closeBtn.style.cssText = 'position:absolute;top:16px;right:16px;z-index:100000;background:rgba(0,0,0,0.7);border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:20px;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;';
+  closeBtn.onclick = closeFullscreenOverlay;
+
+  fsOverlay.appendChild(fsVideo);
+  fsOverlay.appendChild(closeBtn);
+  document.body.appendChild(fsOverlay);
+
+  // Tap backdrop (not video) to close
+  fsOverlay.addEventListener('click', function(e) {
+    if (e.target === fsOverlay) closeFullscreenOverlay();
+  });
+}
+
+function openFullscreenOverlay(src) {
+  createFullscreenOverlay();
+  fsVideo.src = src;
+  fsVideo.muted = false;
+  fsVideo.volume = 1.0;
+  fsOverlay.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  fsVideo.load();
+  fsVideo.play().catch(function() {
+    fsVideo.muted = true;
+    fsVideo.play().catch(function(){});
+  });
+}
+
+function closeFullscreenOverlay() {
+  if (!fsOverlay) return;
+  fsVideo.pause();
+  fsVideo.src = '';
+  fsOverlay.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
 function playProjectCard(card) {
   var img = card.querySelector('.proj-poster');
   var v = card.querySelector('video');
   if (!v) return;
 
-  // ── MOBILE: fullscreen tap ──
+  var src = v.src || (v.querySelector('source') ? v.querySelector('source').src : '');
+
+  // ── MOBILE: custom fullscreen overlay ──
   if (isMobile()) {
-    // Make video visible and unmuted before anything
-    v.style.display = 'block';
-    v.style.position = 'fixed';
-    v.style.inset = '0';
-    v.style.width = '100vw';
-    v.style.height = '100vh';
-    v.style.zIndex = '9999';
-    v.style.background = '#000';
-    v.style.objectFit = 'contain';
-    v.muted = false;
-    v.volume = 1.0;
-    v.controls = true;
-
-    // Force load if not loaded
-    if (v.readyState === 0) {
-      v.load();
-    }
-
-    // iOS: webkitEnterFullscreen must be called after canplay
-    if (v.webkitEnterFullscreen) {
-      var tryFS = function() {
-        v.play().catch(function(){});
-        v.webkitEnterFullscreen();
-      };
-      if (v.readyState >= 1) {
-        tryFS();
-      } else {
-        v.addEventListener('loadedmetadata', tryFS, { once: true });
-      }
-
-      // When iOS fullscreen exits, restore card
-      v.addEventListener('webkitfullscreenchange', function() {
-        if (!document.webkitFullscreenElement && !v.webkitDisplayingFullscreen) {
-          restoreProjectCard(card, v, img);
-        }
-      }, { once: true });
-      return;
-    }
-
-    // Android: standard fullscreen API
-    var p = v.play();
-    if (p !== undefined) {
-      p.then(function() {
-        var req = v.requestFullscreen || v.webkitRequestFullscreen || v.mozRequestFullScreen;
-        if (req) req.call(v);
-      }).catch(function(){});
-    }
-
-    // Restore on fullscreen exit
-    document.addEventListener('fullscreenchange', function() {
-      if (!document.fullscreenElement) {
-        restoreProjectCard(card, v, img);
-      }
-    }, { once: true });
+    openFullscreenOverlay(src);
     return;
   }
 
@@ -941,8 +943,8 @@ function restoreProjectCard(card, v, img) {
   if (img) img.style.display = 'block';
 }
 
-  function pauseProjectCard(card) {
-  if (isMobile()) return; // don't interfere on mobile
+function pauseProjectCard(card) {
+  if (isMobile()) return;
   var v = card.querySelector('video');
   var img = card.querySelector('.proj-poster');
   if (v) { v.pause(); v.currentTime = 0; v.muted = true; v.style.display = 'none'; }
