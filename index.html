@@ -113,7 +113,7 @@
   .showreel-card:hover .showreel-overlay { background:rgba(0,0,0,0.15); }
   .showreel-play { width:76px; height:76px; border-radius:50%; border:2px solid rgba(255,255,255,0.55); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.7); font-size:26px; transition:opacity 0.3s; }
   .showreel-card:hover .showreel-play { opacity:0; }
-  .showreel-info { position:absolute; bottom:0; left:0; right:0; padding:24px 28px; background:linear-gradient(to top,#000 0%,rgba(0,0,0,0.75) 50%,transparent 100%); display:flex; align-items:flex-end; justify-content:space-between; transform:translateY(6px); z-index:3; transition:transform 0.3s; }
+  .showreel-info { position:absolute; bottom:0; left:0; right:0; padding:24px 28px; background:linear-gradient(to top,#000 0%,rgba(0,0,0,0.75) 50%,transparent 100%); display:flex; align-items:flex-end; justify-content:space-between; transform:translateY(6px); transition:transform 0.3s; z-index:3; }
   .showreel-card:hover .showreel-info { transform:translateY(0); }
   .showreel-cat { font-size:10px; font-weight:500; letter-spacing:0.2em; color:#00FF00; margin-bottom:6px; }
   .showreel-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.6rem,3vw,2.6rem); letter-spacing:0.08em; }
@@ -383,7 +383,7 @@
       <div class="projects-grid">
 
   <!-- Card 1: 11LABS AD -->
-  <div class="project-card anim-scale-up stagger-1" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)" ontouchstart="playProjectCard(this)">
+  <div class="project-card anim-scale-up stagger-1" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)">
     <img src="11labs ad.png" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" class="proj-poster" />
     <div class="project-overlay"><div class="proj-play">&#9658;</div></div>
     <div class="project-info">
@@ -395,7 +395,7 @@
   </div>
 
   <!-- Card 2: DATE VENUE REVEAL -->
-  <div class="project-card anim-scale-up stagger-2" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)" ontouchstart="playProjectCard(this)">
+  <div class="project-card anim-scale-up stagger-2" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)">
     <img src="date venue reveal.png" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" class="proj-poster" />
     <div class="project-overlay"><div class="proj-play">&#9658;</div></div>
     <div class="project-info">
@@ -407,7 +407,7 @@
   </div>
 
   <!-- Card 3: THAT'S WHAT I LIKE -->
-  <div class="project-card anim-scale-up stagger-3" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)" ontouchstart="playProjectCard(this)">
+  <div class="project-card anim-scale-up stagger-3" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)">
     <img src="thats what i like.png" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" class="proj-poster" />
     <div class="project-overlay"><div class="proj-play">&#9658;</div></div>
     <div class="project-info">
@@ -419,7 +419,7 @@
   </div>
 
   <!-- Card 4: VOLTAIRE TRAILER -->
-  <div class="project-card anim-scale-up stagger-4" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)" ontouchstart="playProjectCard(this)">
+  <div class="project-card anim-scale-up stagger-4" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)">
     <img src="voltaire trailer.png" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" class="proj-poster" />
     <div class="project-overlay"><div class="proj-play">&#9658;</div></div>
     <div class="project-info">
@@ -431,7 +431,7 @@
   </div>
 
   <!-- Card 5: IPHONE ANIMATION -->
-  <div class="project-card anim-scale-up stagger-5" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)" ontouchstart="playProjectCard(this)">
+  <div class="project-card anim-scale-up stagger-5" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)">
     <img src="iphone animation.png" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" class="proj-poster" />
     <div class="project-overlay"><div class="proj-play">&#9658;</div></div>
     <div class="project-info">
@@ -443,7 +443,7 @@
   </div>
 
   <!-- Card 6: VENUE REVEAL -->
-  <div class="project-card anim-scale-up stagger-6" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)" ontouchstart="playProjectCard(this)">
+  <div class="project-card anim-scale-up stagger-6" data-anim onmouseenter="playProjectCard(this)" onmouseleave="pauseProjectCard(this)">
     <img src="venue reveal.png" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" class="proj-poster" />
     <div class="project-overlay"><div class="proj-play">&#9658;</div></div>
     <div class="project-info">
@@ -809,6 +809,8 @@
   if (poster) poster.style.display = 'block';
 }
 
+  function playProjectCard(card) {
+  var img = card.querySelector('.proj-poster');
   var sources = {
     '11LABS AD': '11labs ad _1.mp4',
     'DATE VENUE REVEAL': 'date venue reveal .mp4',
@@ -817,159 +819,27 @@
     'IPHONE ANIMATION': 'animation.mp4',
     'VENUE REVEAL': 'venue.mp4'
   };
-
-  // Store pre-loaded iOS video elements per card
-var iosVideoCache = new WeakMap();
-
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.project-card').forEach(function(card, i) {
-    var title = card.querySelector('.project-title').textContent;
-    var src = sources[title];
-    if (!src) return;
-
-    // Desktop hover video
-    var v = document.createElement('video');
-    v.src = src;
-    v.muted = true;
-    v.playsInline = true;
-    v.loop = true;
-    v.preload = 'auto';
-    v.style.cssText = 'width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:none;';
-    card.insertBefore(v, card.firstChild);
-
-    // iOS fullscreen video — pre-load silently in background
-    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-      var iosVid = document.createElement('video');
-      iosVid.src = src;
-      iosVid.muted = true; // must start muted to allow background load
-      iosVid.playsInline = false; // required for webkitEnterFullscreen
-      iosVid.controls = true;
-      iosVid.preload = 'auto';
-      iosVid.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;';
-      document.body.appendChild(iosVid);
-
-      // Stagger loads so they don't all hit at once
-      setTimeout(function() { iosVid.load(); }, i * 400);
-
-      iosVideoCache.set(card, iosVid);
-    } else {
-      // Desktop: stagger load
-      setTimeout(function() { v.load(); }, i * 300);
-    }
-  });
-});
-
-function openFullscreenOverlay(card, src) {
-  // ── iOS: use pre-loaded native player ──
-  if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    var iosVid = iosVideoCache.get(card);
-
-    if (!iosVid) {
-      // Fallback: create fresh if cache missed
-      iosVid = document.createElement('video');
-      iosVid.src = src;
-      iosVid.playsInline = false;
-      iosVid.controls = true;
-      iosVid.preload = 'auto';
-      iosVid.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0;';
-      document.body.appendChild(iosVid);
-    }
-
-    iosVid.muted = false;
-    iosVid.volume = 1.0;
-    iosVid.currentTime = 0;
-
-    var enterFS = function() {
-      iosVid.play().catch(function(){});
-      iosVid.webkitEnterFullscreen();
-    };
-
-    // Already buffered = instant. Not ready = wait (should be fast)
-    if (iosVid.readyState >= 2) {
-      enterFS();
-    } else {
-      iosVid.addEventListener('canplay', enterFS, { once: true });
-      iosVid.load();
-    }
-
-    iosVid.addEventListener('webkitendfullscreen', function() {
-      iosVid.pause();
-      iosVid.currentTime = 0;
-      iosVid.muted = true; // re-mute for next background load
-    }, { once: true });
-
-    return;
-  }
-
-  // ── Android: custom overlay ──
-  createFullscreenOverlay();
-  fsVideo.src = src;
-  fsVideo.muted = false;
-  fsVideo.volume = 1.0;
-  fsOverlay.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-  fsVideo.load();
-  fsVideo.play().catch(function() {
-    fsVideo.muted = true;
-    fsVideo.play().catch(function(){});
-  });
-}
-
-function closeFullscreenOverlay() {
-  if (!fsOverlay) return;
-  fsVideo.pause();
-  fsVideo.src = '';
-  fsOverlay.style.display = 'none';
-  document.body.style.overflow = '';
-}
-
-function playProjectCard(card) {
-  var img = card.querySelector('.proj-poster');
-  var v = card.querySelector('video');
-  if (!v) return;
-
-  var src = v.src || (v.querySelector('source') ? v.querySelector('source').src : '');
-
-  if (isMobile()) {
-    openFullscreenOverlay(card, src); // pass card for cache lookup
-    return;
-  }
-
-  // Desktop hover
+  var title = card.querySelector('.project-title').textContent;
+  var src = sources[title];
+  if (!src || card.querySelector('video')) return;
   if (img) img.style.display = 'none';
-  v.style.display = 'block';
+  var v = document.createElement('video');
+  v.src = src;
   v.muted = true;
-  var p = v.play();
-  if (p !== undefined) {
-    p.then(function() {
-      v.muted = false;
-      v.volume = 0.7;
-    }).catch(function() {
-      v.muted = true;
-      v.play().catch(function(){});
-    });
-  }
-}
-
-function restoreProjectCard(card, v, img) {
-  v.pause();
-  v.currentTime = 0;
-  v.muted = true;
-  v.controls = false;
-  v.style.display = 'none';
-  v.style.position = 'absolute';
-  v.style.inset = '0';
-  v.style.width = '100%';
-  v.style.height = '100%';
-  v.style.zIndex = '';
-  if (img) img.style.display = 'block';
+  v.playsinline = true;
+  v.loop = true;
+  v.style.cssText = 'width:100%;height:100%;object-fit:cover;position:absolute;inset:0;';
+  card.insertBefore(v, card.firstChild);
+  v.play().then(function() {
+    v.muted = false;
+    v.volume = 0.7;
+  }).catch(function(){});
 }
 
 function pauseProjectCard(card) {
-  if (isMobile()) return;
   var v = card.querySelector('video');
   var img = card.querySelector('.proj-poster');
-  if (v) { v.pause(); v.currentTime = 0; v.muted = true; v.style.display = 'none'; }
+  if (v) { v.pause(); v.muted = true; v.src = ''; card.removeChild(v); }
   if (img) img.style.display = '';
 }
 
@@ -1101,8 +971,6 @@ function pauseProjectCard(card) {
     toggleMobMenu();
     showPage(page);
   }
- 
 </script>
-<script defer src="https://cdn.vercel-insights.com/v1/speed-insights/script.js"></script>
 </body>
 </html>
