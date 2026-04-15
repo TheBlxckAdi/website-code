@@ -818,103 +818,91 @@
     'VENUE REVEAL': 'venue.mp4'
   };
 
-  document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.project-card').forEach(function(card) {
+  // Store pre-loaded iOS video elements per card
+var iosVideoCache = new WeakMap();
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.project-card').forEach(function(card, i) {
     var title = card.querySelector('.project-title').textContent;
     var src = sources[title];
     if (!src) return;
+
+    // Desktop hover video
     var v = document.createElement('video');
     v.src = src;
     v.muted = true;
     v.playsInline = true;
     v.loop = true;
-    v.preload = 'auto'; // start buffering immediately
+    v.preload = 'auto';
     v.style.cssText = 'width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:none;';
     card.insertBefore(v, card.firstChild);
-    v.load();
-  });
 
-  // Stagger-load so they don't all hammer bandwidth at once
-  var cards = document.querySelectorAll('.project-card');
-  cards.forEach(function(card, i) {
-    var v = card.querySelector('video');
-    if (v) setTimeout(function() { v.load(); }, i * 300);
+    // iOS fullscreen video — pre-load silently in background
+    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      var iosVid = document.createElement('video');
+      iosVid.src = src;
+      iosVid.muted = true; // must start muted to allow background load
+      iosVid.playsInline = false; // required for webkitEnterFullscreen
+      iosVid.controls = true;
+      iosVid.preload = 'auto';
+      iosVid.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;';
+      document.body.appendChild(iosVid);
+
+      // Stagger loads so they don't all hit at once
+      setTimeout(function() { iosVid.load(); }, i * 400);
+
+      iosVideoCache.set(card, iosVid);
+    } else {
+      // Desktop: stagger load
+      setTimeout(function() { v.load(); }, i * 300);
+    }
   });
 });
 
-  function isMobile() {
-  return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth <= 768;
-}
+function openFullscreenOverlay(card, src) {
+  // ── iOS: use pre-loaded native player ──
+  if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    var iosVid = iosVideoCache.get(card);
 
-// Create overlay once and reuse it
-var fsOverlay = null;
-var fsVideo = null;
+    if (!iosVid) {
+      // Fallback: create fresh if cache missed
+      iosVid = document.createElement('video');
+      iosVid.src = src;
+      iosVid.playsInline = false;
+      iosVid.controls = true;
+      iosVid.preload = 'auto';
+      iosVid.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0;';
+      document.body.appendChild(iosVid);
+    }
 
-function createFullscreenOverlay() {
-  if (fsOverlay) return;
-
-  fsOverlay = document.createElement('div');
-  fsOverlay.style.cssText = 'display:none;position:fixed;inset:0;z-index:99999;background:#000;align-items:center;justify-content:center;';
-
-  fsVideo = document.createElement('video');
-  fsVideo.playsInline = true;
-  fsVideo.controls = true;
-  fsVideo.autoplay = true;
-  fsVideo.style.cssText = 'width:100%;height:100%;object-fit:contain;max-height:100vh;';
-
-  var closeBtn = document.createElement('button');
-  closeBtn.innerHTML = '&#10005;';
-  closeBtn.style.cssText = 'position:absolute;top:16px;right:16px;z-index:100000;background:rgba(0,0,0,0.7);border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:20px;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;';
-  closeBtn.onclick = closeFullscreenOverlay;
-
-  fsOverlay.appendChild(fsVideo);
-  fsOverlay.appendChild(closeBtn);
-  document.body.appendChild(fsOverlay);
-
-  // Tap backdrop (not video) to close
-  fsOverlay.addEventListener('click', function(e) {
-    if (e.target === fsOverlay) closeFullscreenOverlay();
-  });
-}
-
-function openFullscreenOverlay(src) {
-  createFullscreenOverlay();
-
-  // ── iOS: use native player (has Apple's Done button + swipe) ──
-  if (typeof document.createElement('video').webkitEnterFullscreen !== 'undefined') {
-    var iosVid = document.createElement('video');
-    iosVid.src = src;
     iosVid.muted = false;
     iosVid.volume = 1.0;
-    iosVid.playsInline = false; // CRITICAL: must be false for webkitEnterFullscreen to work
-    iosVid.controls = true;
-    iosVid.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;';
-    document.body.appendChild(iosVid);
-
-    iosVid.load();
+    iosVid.currentTime = 0;
 
     var enterFS = function() {
       iosVid.play().catch(function(){});
       iosVid.webkitEnterFullscreen();
     };
 
-    if (iosVid.readyState >= 1) {
+    // Already buffered = instant. Not ready = wait (should be fast)
+    if (iosVid.readyState >= 2) {
       enterFS();
     } else {
-      iosVid.addEventListener('loadedmetadata', enterFS, { once: true });
+      iosVid.addEventListener('canplay', enterFS, { once: true });
+      iosVid.load();
     }
 
-    // Clean up when iOS native player closes
     iosVid.addEventListener('webkitendfullscreen', function() {
       iosVid.pause();
-      iosVid.src = '';
-      document.body.removeChild(iosVid);
+      iosVid.currentTime = 0;
+      iosVid.muted = true; // re-mute for next background load
     }, { once: true });
 
     return;
   }
 
-  // ── Android / fallback: custom overlay ──
+  // ── Android: custom overlay ──
+  createFullscreenOverlay();
   fsVideo.src = src;
   fsVideo.muted = false;
   fsVideo.volume = 1.0;
@@ -942,13 +930,12 @@ function playProjectCard(card) {
 
   var src = v.src || (v.querySelector('source') ? v.querySelector('source').src : '');
 
-  // ── MOBILE: custom fullscreen overlay ──
   if (isMobile()) {
-    openFullscreenOverlay(src);
+    openFullscreenOverlay(card, src); // pass card for cache lookup
     return;
   }
 
-  // ── DESKTOP: hover play as before ──
+  // Desktop hover
   if (img) img.style.display = 'none';
   v.style.display = 'block';
   v.muted = true;
