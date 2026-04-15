@@ -879,6 +879,42 @@ function createFullscreenOverlay() {
 
 function openFullscreenOverlay(src) {
   createFullscreenOverlay();
+
+  // ── iOS: use native player (has Apple's Done button + swipe) ──
+  if (typeof document.createElement('video').webkitEnterFullscreen !== 'undefined') {
+    var iosVid = document.createElement('video');
+    iosVid.src = src;
+    iosVid.muted = false;
+    iosVid.volume = 1.0;
+    iosVid.playsInline = false; // CRITICAL: must be false for webkitEnterFullscreen to work
+    iosVid.controls = true;
+    iosVid.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;';
+    document.body.appendChild(iosVid);
+
+    iosVid.load();
+
+    var enterFS = function() {
+      iosVid.play().catch(function(){});
+      iosVid.webkitEnterFullscreen();
+    };
+
+    if (iosVid.readyState >= 1) {
+      enterFS();
+    } else {
+      iosVid.addEventListener('loadedmetadata', enterFS, { once: true });
+    }
+
+    // Clean up when iOS native player closes
+    iosVid.addEventListener('webkitendfullscreen', function() {
+      iosVid.pause();
+      iosVid.src = '';
+      document.body.removeChild(iosVid);
+    }, { once: true });
+
+    return;
+  }
+
+  // ── Android / fallback: custom overlay ──
   fsVideo.src = src;
   fsVideo.muted = false;
   fsVideo.volume = 1.0;
