@@ -852,29 +852,62 @@ function playProjectCard(card) {
   var v = card.querySelector('video');
   if (!v) return;
 
-  // ── MOBILE: open natively in fullscreen ──
+  // ── MOBILE: fullscreen tap ──
   if (isMobile()) {
+    // Make video visible and unmuted before anything
+    v.style.display = 'block';
+    v.style.position = 'fixed';
+    v.style.inset = '0';
+    v.style.width = '100vw';
+    v.style.height = '100vh';
+    v.style.zIndex = '9999';
+    v.style.background = '#000';
+    v.style.objectFit = 'contain';
     v.muted = false;
     v.volume = 1.0;
+    v.controls = true;
 
-    // iOS Safari uses webkitEnterFullscreen on the video element itself
-    if (v.webkitEnterFullscreen) {
+    // Force load if not loaded
+    if (v.readyState === 0) {
       v.load();
-      v.play().catch(function(){});
-      v.webkitEnterFullscreen();
+    }
+
+    // iOS: webkitEnterFullscreen must be called after canplay
+    if (v.webkitEnterFullscreen) {
+      var tryFS = function() {
+        v.play().catch(function(){});
+        v.webkitEnterFullscreen();
+      };
+      if (v.readyState >= 1) {
+        tryFS();
+      } else {
+        v.addEventListener('loadedmetadata', tryFS, { once: true });
+      }
+
+      // When iOS fullscreen exits, restore card
+      v.addEventListener('webkitfullscreenchange', function() {
+        if (!document.webkitFullscreenElement && !v.webkitDisplayingFullscreen) {
+          restoreProjectCard(card, v, img);
+        }
+      }, { once: true });
       return;
     }
 
-    // Android / other mobile: standard Fullscreen API
-    v.style.display = 'block';
+    // Android: standard fullscreen API
     var p = v.play();
     if (p !== undefined) {
       p.then(function() {
-        if (v.requestFullscreen) v.requestFullscreen();
-        else if (v.webkitRequestFullscreen) v.webkitRequestFullscreen();
-        else if (v.mozRequestFullScreen) v.mozRequestFullScreen();
-      }).catch(function() {});
+        var req = v.requestFullscreen || v.webkitRequestFullscreen || v.mozRequestFullScreen;
+        if (req) req.call(v);
+      }).catch(function(){});
     }
+
+    // Restore on fullscreen exit
+    document.addEventListener('fullscreenchange', function() {
+      if (!document.fullscreenElement) {
+        restoreProjectCard(card, v, img);
+      }
+    }, { once: true });
     return;
   }
 
@@ -894,12 +927,27 @@ function playProjectCard(card) {
   }
 }
 
+function restoreProjectCard(card, v, img) {
+  v.pause();
+  v.currentTime = 0;
+  v.muted = true;
+  v.controls = false;
+  v.style.display = 'none';
+  v.style.position = 'absolute';
+  v.style.inset = '0';
+  v.style.width = '100%';
+  v.style.height = '100%';
+  v.style.zIndex = '';
+  if (img) img.style.display = 'block';
+}
+
   function pauseProjectCard(card) {
-    var v = card.querySelector('video');
-    var img = card.querySelector('.proj-poster');
-    if (v) { v.pause(); v.currentTime = 0; v.muted = true; v.style.display = 'none'; }
-    if (img) img.style.display = '';
-  }
+  if (isMobile()) return; // don't interfere on mobile
+  var v = card.querySelector('video');
+  var img = card.querySelector('.proj-poster');
+  if (v) { v.pause(); v.currentTime = 0; v.muted = true; v.style.display = 'none'; }
+  if (img) img.style.display = '';
+}
 
   // ─── SCROLL ANIMATIONS ───────────────────────────────────────────────────────
   function observeAll() {
