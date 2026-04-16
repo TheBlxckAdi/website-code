@@ -2712,7 +2712,10 @@
       var img = card.querySelector('.vid-poster');
       var v = card.querySelector('video');
       if (img) img.style.opacity = '0';
-      if (v) v.style.zIndex = '1';
+      if (v) {
+        v.currentTime = 0; // Reset video to start
+        v.play().catch(function(e) { console.log("Hover play failed:", e) });
+      }
     }
 
     function pauseVid(card) {
@@ -2767,13 +2770,21 @@
       var v = card.querySelector('video');
       if (img) img.style.opacity = '0';
       if (v) v.style.zIndex = '1';
+	  if (v) {
+		v.currentTime = 0; // Reset video to start
+		v.style.zIndex = '1';
+		v.play().catch(function(e) { console.log("Hover play failed:", e) });
+	  }
     }
 
     function pauseProjectCard(card) {
       var img = card.querySelector('.proj-poster');
       var v = card.querySelector('video');
       if (img) img.style.opacity = '1';
-      if (v) v.style.zIndex = '0';
+      if (v) {
+        v.pause(); // Stop playing when mouse leaves
+        v.style.zIndex = '0';
+      }
     }
 
     // ─── SCROLL ANIMATIONS & AUTOPLAY ───────────────────────────────────────────
